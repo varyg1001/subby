@@ -34,7 +34,7 @@ class SubRipFile(UserList):
         """Exports subtitle as text"""
         return srt.compose(self.data, eol=eol)
 
-    def save(self, path: Path, encoding: str = 'utf-8-sig', eol: str | None = None):
+    def save(self, path: Path, encoding: str = 'utf-8', eol: str | None = None):
         """Exports subtitle as text"""
         with path.open(mode='wb') as fp:
             fp.write(srt.compose(self.data, eol=eol).encode(encoding))
