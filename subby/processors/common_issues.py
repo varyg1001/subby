@@ -189,7 +189,7 @@ class CommonIssuesFixer(BaseProcessor):
             # Remove italics from hyphen, when content immediately following is not italics
             line = re.sub(r'<i>-</i>([^<]+)', r'-\1', line).strip()
             # Delete duplicate frontal hyphens
-            line = re.sub(r"^- -", "- ", line.content)
+            line = re.sub(r"^- -", "- ", line)
 
             return line
 
