@@ -1,6 +1,6 @@
 [project]
 name = "subby"
-version = "0.3.27"
+version = "0.3.28"
 description = "Advanced subtitle converter and processor"
 authors = [{name = "vevv"}]
 license = "GPL-3.0-or-later"
@@ -19,13 +19,11 @@ dependencies = [
     "ftfy (>=6.3.1,<7.0.0)",
 ]
 
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.4.2"
-lxml-stubs = "^0.5.1"
-
+[project.optional-dependencies]
+dev = [
+    "pytest (>=8.4.2)",
+    "lxml-stubs (>=0.5.1)",
+]
 
 [project.scripts]
 subby = "subby.cli:main"
