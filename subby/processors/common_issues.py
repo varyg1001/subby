@@ -172,10 +172,17 @@ class CommonIssuesFixer(BaseProcessor):
             #
             # Adds missing line splits (primarily present in Amazon subtitles)
             line = re.sub(r'(.*)([^.][\]\)])([A-Z][^.])', r'\1\2\n\3', line)
+            def __add_missing_split(m: re.Match) -> str:
+                # Avoid adding a duplicate hyphen
+                # Avoid three-liners if second part has a line break
+                if m[0].startswith('-'):
+                    return f'{m[1]}{m[2]}\n- {m[3]}{m[4].replace("\n", "")}'
+                return f'- {m[1]}{m[2]}\n- {m[3]}{m[4].replace("\n", "")}'
             line = re.sub(
-                r'(.*)([^\.\sA-Z][!\.;:?])(?<!(?:Mr|Ms)\.)(?<!Mrs\.)([A-Z][^.])',
-                r'- \1\2\n- \3',
-                line
+                r'(.*)([^\.\sA-Z][!\.;:?])(?<!(?:Mr|Ms)\.)(?<!Mrs\.)([A-Z][^.])(.*)',
+                __add_missing_split,
+                line,
+                flags=re.DOTALL
             )
             # Fix weird linebreaks (caused by stripping SDH or not)
             line = re.sub(r'(^<[a-z]>|\n<[a-z]>)(\w+)\n', r'\1\2 ', line)
@@ -189,7 +196,7 @@ class CommonIssuesFixer(BaseProcessor):
             # Remove italics from hyphen, when content immediately following is not italics
             line = re.sub(r'<i>-</i>([^<]+)', r'-\1', line).strip()
             # Delete duplicate frontal hyphens
-            line = re.sub(r"^- -", "- ", line)
+            line = re.sub(r"^- - ?", "- ", line)
 
             return line
 
